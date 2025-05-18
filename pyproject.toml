@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stellar_harvest_ie_store"
+version = "0.1.0"
+description = "Persistence layer: database engine, session factory, and schema initialization for StellarHarvest"
+readme = "README.md"
+requires-python = ">=3.11"
+keywords = ["database", "orm", "sqlalchemy", "postgres", "persistence"]
+authors = [
+  { name = "Machine Learning Maverick", email = "github@machinelearningmaverick.com" }
+]
+dependencies = [
+  "sqlalchemy[asyncio]>=1.4.0",
+  "asyncpg>=0.26.0",
+  "pydantic-settings>=2.0.0",
+  "stellar-harvest-ie-models>=0.1.0",
+  "stellar-harvest-ie-config>=0.1.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["stellar_harvest_ie_store*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-s -q --disable-warnings --strict-markers"
+log_cli = true
+log_cli_level = "DEBUG"
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.2.0",
+  "pytest-asyncio>=0.20.0",
+  "mypy>=0.971",
+  "flake8>=4.0.1",
+  "alembic>=1.8.0",
+]
