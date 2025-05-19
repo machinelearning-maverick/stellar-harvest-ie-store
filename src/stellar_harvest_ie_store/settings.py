@@ -8,15 +8,13 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 logger = logging.getLogger(__name__)
 
-DATABASE_URL = "DATABASE_URL"
-
 
 class StoreSettings(BaseSettings):
     logger.info("StoreSettings()")
 
-    model_config = SettingsConfigDict(env_file=None)
+    model_config = SettingsConfigDict(env_file=".env")
 
-    database_url: str = Field("postgresql+asyncpg://app:secret@postgres/ui_db")
+    database_url: str
 
 
 settings = StoreSettings()
