@@ -1,0 +1,6 @@
+sqlalchemy[asyncio]>=1.4.0
+asyncpg>=0.26.0
+pydantic>=1.10.2
+pydantic-settings>=2.0.0
+stellar-harvest-ie-models
+stellar-harvest-ie-config
