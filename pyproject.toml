@@ -4,19 +4,19 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "stellar_harvest_ie_store"
-version = "0.1.0"
+version = "0.1.1"
 description = "Persistence layer: database engine, session factory, and schema initialization for StellarHarvest"
 readme = "README.md"
 requires-python = ">=3.11"
 keywords = ["database", "orm", "sqlalchemy", "postgres", "persistence"]
 authors = [
-  { name = "Machine Learning Maverick", email = "github@machinelearningmaverick.com" }
+  { name = "Machine Learning Maverick", email = "github@machinelearningmaverick.com" },
 ]
 dependencies = [
   "sqlalchemy[asyncio]>=1.4.0",
   "asyncpg>=0.26.0",
-  "pydantic>=1.10.2",
-  "pydantic-settings>=2.0.0",
+  "pydantic>=2.11.0",
+  "pydantic-settings>=2.8.0",
   "stellar-harvest-ie-models",
   "stellar-harvest-ie-config",
 ]
