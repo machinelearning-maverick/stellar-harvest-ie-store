@@ -57,3 +57,23 @@ async def test_async_repository_add(session_factory):
     items = result.scalars().all()
     assert len(items) == 1
     assert items[0].kp_index == 7
+
+
+@pytest.mark.asyncio
+async def test_async_repository_get(session_factory):
+    async with session_factory() as session:
+        repository = AsyncRepository(KpIndexEntity, session)
+
+        time_tag = datetime.datetime(2025, 5, 23, 15, 0, 0)
+        created = await repository.add(KpIndexEntity(time_tag, kp_index=4))
+
+        read = await repository.get(created.id)
+
+        assert read is not None
+        assert read.id == created.id
+        assert read.kp_index == 4
+        assert read.time_tag == time_tag
+
+        result = await session.execute(select(KpIndexEntity).where(KpIndexEntity.id == created.id))
+        fetched = result.scalars().one()
+        assert fetched.kp_index == 4
