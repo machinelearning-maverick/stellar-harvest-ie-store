@@ -47,6 +47,13 @@ async def test_async_repository_add(session_factory):
         )
         saved = await repository.add(entity)
 
+    # Check returned object
     assert saved.id is not None
     assert saved.kp_index == 7
     assert saved.time_tag == datetime.datetime(2025, 5, 21, 12, 0, 0)
+
+    # Confirm it's persisted
+    result = await session.execute(select(KpIndexEntity))
+    items = result.scalars().all()
+    assert len(items) == 1
+    assert items[0].kp_index == 7
