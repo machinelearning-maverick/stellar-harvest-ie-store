@@ -22,7 +22,6 @@ class AsyncRepository(Generic[T]):
         result = await self.session.execute(statement)
         return result.scalars().first()
 
-
     async def update(self, id: Any, **kwargs) -> T:
         read = await self.get(id)
         if not read:
@@ -32,3 +31,10 @@ class AsyncRepository(Generic[T]):
         await self.session.commit()
         await self.session.refresh(read)
         return read
+
+    async def delete(self, id: Any) -> None:
+        read = await self.get(id)
+        if not read:
+            raise NoResultFound(f"{self.model.__name__}<{id}> not found")
+        await self.session.delete(read)
+        await self.session.commit()
