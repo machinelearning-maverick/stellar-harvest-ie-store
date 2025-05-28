@@ -21,3 +21,14 @@ class AsyncRepository(Generic[T]):
         statement = select(self.model).where(self.model.id == id)
         result = await self.session.execute(statement)
         return result.scalars().first()
+
+
+    async def update(self, id: Any, **kwargs) -> T:
+        read = await self.get(id)
+        if not read:
+            raise NoResultFound(f"{self.model.__name__}<{id}> not found")
+        for key, value in kwargs.items():
+            setattr(read, key, value)
+        await self.session.commit()
+        await self.session.refresh(read)
+        return read

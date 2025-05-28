@@ -65,7 +65,7 @@ async def test_async_repository_get(session_factory):
         repository = AsyncRepository(KpIndexEntity, session)
 
         time_tag = datetime.datetime(2025, 5, 23, 15, 0, 0)
-        created = await repository.add(KpIndexEntity(time_tag, kp_index=4))
+        created = await repository.add(KpIndexEntity(time_tag=time_tag, kp_index=4))
 
         read = await repository.get(created.id)
 
@@ -74,6 +74,41 @@ async def test_async_repository_get(session_factory):
         assert read.kp_index == 4
         assert read.time_tag == time_tag
 
-        result = await session.execute(select(KpIndexEntity).where(KpIndexEntity.id == created.id))
+        result = await session.execute(
+            select(KpIndexEntity).where(KpIndexEntity.id == created.id)
+        )
         fetched = result.scalars().one()
         assert fetched.kp_index == 4
+
+
+@pytest.mark.asyncio
+async def test_async_repository_update(session_factory):
+    async with session_factory() as session:
+        repository = AsyncRepository(KpIndexEntity, session)
+
+        time_tag_original = datetime.datetime(2025, 5, 27, 10, 0, 0)
+        created = await repository.add(
+            KpIndexEntity(
+                time_tag=time_tag_original, kp_index=2, estimated_kp=2.1, kp="1P"
+            )
+        )
+
+        time_tag_updated = datetime.datetime(2025, 5, 27, 12, 30, 0)
+        updated = await repository.update(
+            created.id, time_tag=time_tag_updated, kp_index=5, estimated_kp=5.5, kp="3K"
+        )
+
+        assert updated.id == created.id
+        assert updated.time_tag == time_tag_updated
+        assert updated.kp_index == 5
+        assert updated.estimated_kp == 5.5
+        assert updated.kp == "3K"
+
+        result = await session.execute(
+            select(KpIndexEntity).where(KpIndexEntity.id == created.id)
+        )
+        fetched = result.scalars().one()
+        assert fetched.kp_index == 5
+        assert fetched.time_tag == time_tag_updated
+        assert fetched.estimated_kp == 5.5
+        assert fetched.kp == "3K"
