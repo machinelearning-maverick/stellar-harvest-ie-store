@@ -39,6 +39,30 @@ def override_get_session(monkeypatch, session_factory):
 
 
 @pytest.mark.asyncio
+async def test_async_repository_list(session_factory):
+    async with session_factory() as session:
+        repository = AsyncRepository(KpIndexEntity, session)
+
+        first_time_tag = datetime(2025, 6, 3, 8, 0, 0)
+        second_time_tag = datetime(2025, 6, 3, 9, 0, 0)
+        await repository.add(KpIndexEntity(time_tag=first_time_tag, kp_index=1))
+        await repository.add(KpIndexEntity(time_tag=second_time_tag, kp_index=2))
+
+        items = await repository.list()
+        assert len(items) == 2
+        assert items[0].kp_index == 1
+        assert items[1].kp_index == 2
+
+        items_offset = await repository.list(offset=1, limit=1)
+        assert len(items_offset) == 1
+        assert items_offset[0].kp_index == 2
+
+        result = await session.execute(select(KpIndexEntity).offset(0).limit(2))
+        raw_items = result.scalars().all()
+        assert len(raw_items) == 2
+
+
+@pytest.mark.asyncio
 async def test_async_repository_add(session_factory):
     async with session_factory() as session:
         repository = AsyncRepository(KpIndexEntity, session)

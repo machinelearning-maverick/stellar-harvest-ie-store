@@ -11,6 +11,11 @@ class AsyncRepository(Generic[T]):
         self.model = model
         self.session = session
 
+    async def list(self, offset: int = 0, limit: int = 100) -> List[T]:
+        statement = select(self.model).offset(offset).limit(limit)
+        result = await self.session.execute(statement)
+        return result.scalars().all()
+
     async def add(self, obj: T) -> T:
         self.session.add(obj)
         await self.session.commit()
