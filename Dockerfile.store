@@ -1,0 +1,15 @@
+FROM python:3.11-slim
+WORKDIR /app
+
+RUN --mount=type=secret,id=env \
+    set -o allexport && \
+    . /run/secrets/env && \
+    set +o allexport && \
+    pip install --upgrade --no-cache-dir \
+      --index-url https://pypi.org/simple \
+      --extra-index-url "$DEVPI_HASEK_DEV_URL" \
+      --trusted-host host.docker.internal \
+      stellar-harvest-ie-store
+    # When hosted on VPS - remove '--trusted-host'
+
+CMD ["python", "-m", "stellar_harvest_ie_store.init_db"]

@@ -1,3 +1,5 @@
+from stellar_harvest_ie_config.utils.log_decorators import log_io
+
 from typing import Generic, Type, TypeVar, List, Optional, Any
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import NoResultFound
@@ -7,6 +9,7 @@ T = TypeVar("T")
 
 
 class AsyncRepository(Generic[T]):
+    @log_io()
     def __init__(self, model: Type[T], session: AsyncSession):
         self.model = model
         self.session = session
@@ -16,6 +19,7 @@ class AsyncRepository(Generic[T]):
         result = await self.session.execute(statement)
         return result.scalars().all()
 
+    @log_io()
     async def add(self, obj: T) -> T:
         self.session.add(obj)
         await self.session.commit()
