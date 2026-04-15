@@ -1,19 +1,24 @@
 import logging
-from stellar_harvest_ie_config.logging_config import setup_logging
 
-setup_logging()
-
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 logger = logging.getLogger(__name__)
 
+DATABASE_URL = "DATABASE_URL"
+
 
 class StoreSettings(BaseSettings):
-    logger.info("StoreSettings()")
+    model_config = SettingsConfigDict(env_file=None)
 
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    database_url: str = Field(
+        "postgresql+asyncpg://postgres:PAssw0rd@postgres:5432/stellar_harvest_ie_db",
+        env=DATABASE_URL,
+    )
 
-    database_url: str
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        logger.info("StoreSettings()")
 
 
 settings = StoreSettings()
