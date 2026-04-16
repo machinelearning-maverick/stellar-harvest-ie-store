@@ -22,6 +22,9 @@ dependencies = [
   "stellar-harvest-ie-models",
 ]
 
+[project.scripts]
+init-db = "stellar_harvest_ie_store.init_db:main"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["stellar_harvest_ie_store*"]
