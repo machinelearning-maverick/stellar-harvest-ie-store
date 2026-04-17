@@ -3,5 +3,5 @@ aiosqlite>=0.17.0
 asyncpg>=0.26.0
 pydantic>=2.11.0
 pydantic-settings>=2.8.0
-stellar-harvest-ie-models
-stellar-harvest-ie-config
+stellar-harvest-ie-config>=0.1.2
+stellar-harvest-ie-models>=0.3.1

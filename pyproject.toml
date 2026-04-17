@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "stellar_harvest_ie_store"
-version = "0.1.1"
+name = "stellar-harvest-ie-store"
+version = "0.1.2"
 description = "Persistence layer: database engine, session factory, and schema initialization for StellarHarvest"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -18,8 +18,8 @@ dependencies = [
   "asyncpg>=0.26.0",
   "pydantic>=2.11.0",
   "pydantic-settings>=2.8.0",
-  "stellar-harvest-ie-config",
-  "stellar-harvest-ie-models",
+  "stellar-harvest-ie-config>=0.1.2",
+  "stellar-harvest-ie-models>=0.3.1",
 ]
 
 [project.scripts]
