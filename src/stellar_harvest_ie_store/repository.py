@@ -14,6 +14,7 @@ class AsyncRepository(Generic[T]):
         self.model = model
         self.session = session
 
+    @log_io()
     async def list(self, offset: int = 0, limit: int = 100) -> List[T]:
         statement = select(self.model).offset(offset).limit(limit)
         result = await self.session.execute(statement)
