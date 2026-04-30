@@ -27,6 +27,14 @@ class AsyncRepository(Generic[T]):
         await self.session.refresh(obj)
         return obj
 
+    @log_io()
+    async def add_all(self, objs: List[T]) -> List[T]:
+        self.session.add_all(objs)
+        await self.session.commit()
+        for obj in objs:
+            await self.session.refresh(obj)
+        return objs
+
     async def get(self, id: Any) -> Optional[T]:
         statement = select(self.model).where(self.model.id == id)
         result = await self.session.execute(statement)
